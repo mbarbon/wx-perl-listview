@@ -18,7 +18,7 @@ use strict;
 
   my $item = $model->get_item( $row, $column );
 
-Where item has the form:
+Where item has the form (only C<string> is mandatory):
 
   { string     => 'text',
     image      => $image_index,
@@ -31,5 +31,15 @@ Where item has the form:
 =cut
 
 sub get_item { my( $self, $row, $column ) = @_; die 'Implement me'; }
+
+=head2 get_item_count
+
+  my $count = $model->get_item_count;
+
+Returns the number of items in the model.
+
+=cut
+
+sub get_item_count { my( $self ) = @_; die 'Implement me'; }
 
 1;

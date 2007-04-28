@@ -28,7 +28,7 @@ my $model = Wx::Perl::ListView::SimpleModel->new( $data[0] );
 my $listview = Wx::Perl::ListView->new( $model, $frame );
 $listview->InsertColumn( 0, 'First' );
 $listview->InsertColumn( 1, 'Second' );
-$listview->SetItemCount( 4 );
+$listview->refresh;
 
 my $index = 0;
 my $bar = Wx::MenuBar->new;
@@ -36,7 +36,7 @@ my $menu = Wx::Menu->new;
 EVT_MENU( $frame, $menu->Append( -1, "Toggle" ),
           sub { $index = ( $index + 1 ) % 2;
                 $model->{data} = $data[$index];
-                $listview->Refresh;
+                $listview->refresh;
                 } );
 $bar->Append( $menu, "Do it" );
 $frame->SetMenuBar( $bar );

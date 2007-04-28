@@ -43,6 +43,12 @@ sub get_item {
     return $self->data->[$row][$column];
 }
 
+sub get_item_count {
+    my( $self ) = @_;
+
+    return scalar @{$self->data};
+}
+
 =head2 data
 
   my $data = $self->data;

@@ -32,7 +32,7 @@ sub new {
                                    $pos || [-1, -1], $size || [-1,-1],
                                    ( $style || 0 ) |wxLC_VIRTUAL|wxLC_REPORT );
 
-    $self->{model} = $model;
+    $self->{_model} = $model;
     $self->{_cache} = { row => -1, column => -1 };
     $self->{_attr} = Wx::ListItemAttr->new;
 
@@ -45,7 +45,7 @@ sub _get_item {
       if    $self->{_cache}{row} == $row
          && $self->{_cache}{column} == $column;
 
-    my $item = $self->model->get_item( $row, $column );
+    my $item = $self->{_model}->get_item( $row, $column );
     die "Could not get item for ($row, $column)" unless $item;
     if( $item->{font} || $item->{foreground} || $item->{background} ) {
         $item->{attr} = Wx::ListItemAttr->new;
@@ -90,13 +90,34 @@ sub OnGetItemAttr {
     return $item->{attr} || $self->{_attr};
 }
 
+=head2 refresh
+
+  $listview->refresh;
+  $listview->refresh( $item );
+  $listview->refresh( $from, $to );
+
+Refreshes the displayed data from the model.  Might also change
+the number of items in the control.
+
+=cut
+
+sub refresh {
+    my( $self, $from, $to ) = @_;
+
+    $self->{_cache} = { row => -1, column => -1 };
+    $self->SetItemCount( $self->{_model}->get_item_count );
+    $self->RefreshItems( $from, $to ), return if @_ == 3;
+    $self->RefreshItem( $from ), return if @_ == 2;
+    $self->Refresh, return;
+}
+
 =head2 model
 
   my $model = $listview->model;
 
 =cut
 
-sub model    { $_[0]->{model} }
+sub model    { $_[0]->{_model} }
 
 1;
 
